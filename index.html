@@ -3,21 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AssinieGo - Réservations</title>
+    <title>AssinieGo - Réservations Hôtels & Activités</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #f5f7fa; padding-bottom: 70px; }
+        
+        /* Header */
         .header { background: linear-gradient(135deg, #0a4b6e, #063a57); color: white; padding: 30px 20px; text-align: center; }
         .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
         .header h1 span { color: #f39c12; }
+        .header p { opacity: 0.9; font-size: 0.9rem; }
+        
+        /* Stats */
         .stats { display: flex; justify-content: space-around; background: white; margin: 20px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .stat { text-align: center; }
         .stat-value { font-size: 1.5rem; font-weight: 800; color: #0a4b6e; }
         .stat-label { font-size: 0.7rem; color: #7f8c8d; }
+        
+        /* Sections */
         .section { padding: 0 20px; margin-bottom: 30px; }
-        .section-title { font-size: 1.3rem; font-weight: 700; color: #0a4b6e; margin-bottom: 15px; }
+        .section-title { font-size: 1.3rem; font-weight: 700; color: #0a4b6e; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: #f39c12; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 8px; border-radius: 50px; }
+        .tab { flex: 1; text-align: center; padding: 10px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .tab.active { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+        
+        /* Cards */
         .card { background: white; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; cursor: pointer; transition: transform 0.2s; }
         .card:active { transform: scale(0.98); }
         .card-icon { width: 80px; background: linear-gradient(135deg, #f39c12, #e67e22); display: flex; align-items: center; justify-content: center; }
@@ -26,19 +41,29 @@
         .card-title { font-size: 1.1rem; font-weight: 700; color: #0a4b6e; margin-bottom: 4px; }
         .card-desc { font-size: 0.75rem; color: #7f8c8d; margin-bottom: 8px; }
         .card-price { font-size: 1.1rem; font-weight: 800; color: #f39c12; }
+        .card-location { font-size: 0.7rem; color: #95a5a6; margin-top: 5px; }
+        .card-rating { color: #f39c12; font-size: 0.8rem; margin-top: 5px; }
+        
+        /* Bottom Navigation */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; }
         .nav-item { text-align: center; cursor: pointer; padding: 5px 15px; }
         .nav-item i { font-size: 1.3rem; color: #95a5a6; }
         .nav-item span { font-size: 0.7rem; color: #95a5a6; display: block; }
         .nav-item.active i, .nav-item.active span { color: #f39c12; }
+        
+        /* Form */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.85rem; color: #2c3e50; }
-        .form-group input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 0.9rem; }
         .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 10px; }
         .btn:active { transform: scale(0.98); }
         .empty { text-align: center; padding: 40px; color: #95a5a6; }
         .booking-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .hide { display: none; }
+        .type-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 5px; }
+        .type-activity { background: #e3f2fd; color: #0a4b6e; }
+        .type-restaurant { background: #fff3e0; color: #e67e22; }
+        .type-hotel { background: #e8f5e9; color: #27ae60; }
     </style>
 </head>
 <body>
@@ -48,11 +73,11 @@
     <div id="home-page">
         <div class="header">
             <h1>Bienvenue sur<br><span>AssinieGo</span></h1>
-            <p>Votre week-end à Assinie commence ici</p>
+            <p>Hôtels • Restaurants • Activités</p>
         </div>
         <div class="stats" id="stats"></div>
         <div class="section">
-            <div class="section-title">🔥 Populaires</div>
+            <div class="section-title"><i class="fas fa-fire"></i> Populaires</div>
             <div id="popular-list"></div>
         </div>
     </div>
@@ -60,18 +85,24 @@
     <!-- Page Activités -->
     <div id="activities-page" class="hide">
         <div class="header">
-            <h1>🏄 <span>Toutes les activités</span></h1>
-            <p>Choisissez votre expérience</p>
+            <h1>🏄 <span>Découvrir Assinie</span></h1>
+            <p>Activités • Restaurants • Hôtels</p>
         </div>
         <div class="section">
-            <div id="activities-list"></div>
+            <div class="tabs" id="category-tabs">
+                <div class="tab active" data-cat="all">Tous</div>
+                <div class="tab" data-cat="activity">🏄 Activités</div>
+                <div class="tab" data-cat="restaurant">🍽️ Restaurants</div>
+                <div class="tab" data-cat="hotel">🏨 Hôtels</div>
+            </div>
+            <div id="all-list"></div>
         </div>
     </div>
 
     <!-- Page Réservation -->
     <div id="booking-page" class="hide">
         <div class="header">
-            <h1>📝 <span>Nouvelle réservation</span></h1>
+            <h1>📝 <span>Réservation</span></h1>
             <p>Remplissez le formulaire</p>
         </div>
         <div class="section">
@@ -93,7 +124,7 @@
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active" data-page="home"><i class="fas fa-home"></i><span>Accueil</span></div>
-        <div class="nav-item" data-page="activities"><i class="fas fa-water"></i><span>Activités</span></div>
+        <div class="nav-item" data-page="activities"><i class="fas fa-compass"></i><span>Découvrir</span></div>
         <div class="nav-item" data-page="booking"><i class="fas fa-calendar-alt"></i><span>Réserver</span></div>
         <div class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profil</span></div>
     </div>
@@ -101,17 +132,30 @@
 
 <script>
     // ========== DONNÉES ==========
-    const activities = [
-        { id: 1, name: "Jet-Ski Extrême", desc: "Sensation forte sur l'océan", price: 25000, icon: "fa-water" },
-        { id: 2, name: "Quad Aventure", desc: "Explorez les 17 km de sable blanc", price: 35000, icon: "fa-motorcycle" },
-        { id: 3, name: "Bateau VIP", desc: "Croisière privée sur la lagune", price: 150000, icon: "fa-ship" },
-        { id: 4, name: "Pêche Traditionnelle", desc: "Techniques de pêche locales", price: 15000, icon: "fa-fish" },
-        { id: 5, name: "Parc National", desc: "Découverte des îles Ehotilé", price: 10000, icon: "fa-tree" },
-        { id: 6, name: "Coucher de Soleil", desc: "Moment magique à La Passe", price: 8000, icon: "fa-sun" }
+    const items = [
+        // Activités
+        { id: 1, name: "Jet-Ski Extrême", desc: "Sensation forte sur l'océan", price: 25000, type: "activity", icon: "fa-water", location: "Plage de La Passe", rating: 4.8 },
+        { id: 2, name: "Quad Aventure", desc: "Explorez les 17 km de sable blanc", price: 35000, type: "activity", icon: "fa-motorcycle", location: "Plage d'Assinie", rating: 4.9 },
+        { id: 3, name: "Bateau VIP", desc: "Croisière privée sur la lagune", price: 150000, type: "activity", icon: "fa-ship", location: "Lagune Aby", rating: 5.0 },
+        { id: 4, name: "Pêche Traditionnelle", desc: "Techniques de pêche locales", price: 15000, type: "activity", icon: "fa-fish", location: "Village de pêcheurs", rating: 4.5 },
+        { id: 5, name: "Parc National", desc: "Découverte des îles Ehotilé", price: 10000, type: "activity", icon: "fa-tree", location: "Îles Ehotilé", rating: 4.7 },
+        { id: 6, name: "Coucher de Soleil", desc: "Moment magique à La Passe", price: 8000, type: "activity", icon: "fa-sun", location: "La Passe", rating: 4.9 },
+        
+        // Restaurants
+        { id: 7, name: "La Plage Gourmande", desc: "Cuisine locale et fruits de mer", price: 5000, type: "restaurant", icon: "fa-utensils", location: "Plage d'Assinie", rating: 4.6, priceRange: "moyen" },
+        { id: 8, name: "Chez Fatou", desc: "Poisson frais et attiéké", price: 3500, type: "restaurant", icon: "fa-fish", location: "Village", rating: 4.4, priceRange: "bon marché" },
+        { id: 9, name: "Le Nautique", desc: "Restaurant gastronomique vue mer", price: 12000, type: "restaurant", icon: "fa-champagne-glasses", location: "Bord de mer", rating: 4.9, priceRange: "luxe" },
+        { id: 10, name: "La Lagune", desc: "Spécialités ivoiriennes", price: 8000, type: "restaurant", icon: "fa-leaf", location: "Bord de lagune", rating: 4.5, priceRange: "moyen" },
+        
+        // Hôtels
+        { id: 11, name: "L'Écrin d'Assinie", desc: "Villas de luxe avec piscine", price: 85000, type: "hotel", icon: "fa-hotel", location: "Plage privée", rating: 4.9, rooms: "5 suites" },
+        { id: 12, name: "Le Paradis Blanc", desc: "Bungalows pieds dans l'eau", price: 65000, type: "hotel", icon: "fa-umbrella-beach", location: "Face à l'océan", rating: 4.7, rooms: "12 bungalows" },
+        { id: 13, name: "Villa Assinie", desc: "Chambres confortables, jardin tropical", price: 35000, type: "hotel", icon: "fa-tree", location: "Centre ville", rating: 4.3, rooms: "8 chambres" }
     ];
     
     let bookings = [];
-    let selectedActivity = activities[0];
+    let selectedItem = items[0];
+    let currentFilter = "all";
     
     // ========== STOCKAGE ==========
     try {
@@ -127,54 +171,82 @@
     function updateStats() {
         const statsDiv = document.getElementById('stats');
         if (statsDiv) {
+            const activitiesCount = items.filter(i => i.type === 'activity').length;
+            const restaurantsCount = items.filter(i => i.type === 'restaurant').length;
+            const hotelsCount = items.filter(i => i.type === 'hotel').length;
             statsDiv.innerHTML = `
                 <div class="stat"><div class="stat-value">${bookings.length}</div><div class="stat-label">Réservations</div></div>
-                <div class="stat"><div class="stat-value">${activities.length}</div><div class="stat-label">Expériences</div></div>
-                <div class="stat"><div class="stat-value">4.8</div><div class="stat-label">⭐ Note</div></div>
+                <div class="stat"><div class="stat-value">${activitiesCount}</div><div class="stat-label">Activités</div></div>
+                <div class="stat"><div class="stat-value">${restaurantsCount}</div><div class="stat-label">Restos</div></div>
+                <div class="stat"><div class="stat-value">${hotelsCount}</div><div class="stat-label">Hôtels</div></div>
             `;
         }
+    }
+    
+    function getTypeBadge(type) {
+        if (type === 'activity') return '<span class="type-badge type-activity">🏄 Activité</span>';
+        if (type === 'restaurant') return '<span class="type-badge type-restaurant">🍽️ Restaurant</span>';
+        return '<span class="type-badge type-hotel">🏨 Hôtel</span>';
+    }
+    
+    function renderCard(item) {
+        return `
+            <div class="card" onclick="selectItem(${item.id})">
+                <div class="card-icon"><i class="fas ${item.icon}"></i></div>
+                <div class="card-content">
+                    ${getTypeBadge(item.type)}
+                    <div class="card-title">${item.name}</div>
+                    <div class="card-desc">${item.desc}</div>
+                    <div class="card-price">${item.price.toLocaleString()} FCFA <small>/${item.type === 'hotel' ? 'nuit' : item.type === 'restaurant' ? 'menu' : 'pers'}</small></div>
+                    <div class="card-location"><i class="fas fa-map-marker-alt"></i> ${item.location}</div>
+                    <div class="card-rating">${'★'.repeat(Math.floor(item.rating))} ${item.rating}</div>
+                </div>
+            </div>
+        `;
     }
     
     function showPopular() {
         const container = document.getElementById('popular-list');
         if (container) {
-            container.innerHTML = activities.slice(0, 3).map(a => `
-                <div class="card" onclick="selectActivity(${a.id})">
-                    <div class="card-icon"><i class="fas ${a.icon}"></i></div>
-                    <div class="card-content">
-                        <div class="card-title">${a.name}</div>
-                        <div class="card-desc">${a.desc}</div>
-                        <div class="card-price">${a.price.toLocaleString()} FCFA <small>/pers</small></div>
-                    </div>
-                </div>
-            `).join('');
+            const popular = items.filter(i => i.rating >= 4.7).slice(0, 4);
+            container.innerHTML = popular.map(i => renderCard(i)).join('');
         }
     }
     
-    function showAllActivities() {
-        const container = document.getElementById('activities-list');
+    function showAllItems() {
+        const container = document.getElementById('all-list');
         if (container) {
-            container.innerHTML = activities.map(a => `
-                <div class="card" onclick="selectActivity(${a.id})">
-                    <div class="card-icon"><i class="fas ${a.icon}"></i></div>
-                    <div class="card-content">
-                        <div class="card-title">${a.name}</div>
-                        <div class="card-desc">${a.desc}</div>
-                        <div class="card-price">${a.price.toLocaleString()} FCFA <small>/pers</small></div>
-                    </div>
-                </div>
-            `).join('');
+            let filtered = items;
+            if (currentFilter !== 'all') {
+                filtered = items.filter(i => i.type === currentFilter);
+            }
+            container.innerHTML = filtered.map(i => renderCard(i)).join('');
         }
+    }
+    
+    function setupTabs() {
+        document.querySelectorAll('#category-tabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('#category-tabs .tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.cat;
+                showAllItems();
+            });
+        });
     }
     
     function showBookingForm() {
         const container = document.getElementById('booking-form');
         if (container) {
+            const typeText = selectedItem.type === 'hotel' ? 'nuit' : (selectedItem.type === 'restaurant' ? 'menu' : 'personne');
             container.innerHTML = `
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="card-content">
-                        <div class="card-title">${selectedActivity.name}</div>
-                        <div class="card-price">${selectedActivity.price.toLocaleString()} FCFA / personne</div>
+                        ${getTypeBadge(selectedItem.type)}
+                        <div class="card-title">${selectedItem.name}</div>
+                        <div class="card-desc">${selectedItem.desc}</div>
+                        <div class="card-price">${selectedItem.price.toLocaleString()} FCFA / ${typeText}</div>
+                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> ${selectedItem.location}</div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -182,7 +254,7 @@
                     <input type="date" id="booking-date">
                 </div>
                 <div class="form-group">
-                    <label>👥 Nombre de personnes</label>
+                    <label>👥 Nombre de ${selectedItem.type === 'hotel' ? 'chambres' : (selectedItem.type === 'restaurant' ? 'couverts' : 'personnes')}</label>
                     <input type="number" id="booking-people" value="1" min="1">
                 </div>
                 <div class="form-group">
@@ -200,7 +272,7 @@
     
     function confirmBooking() {
         const date = document.getElementById('booking-date')?.value;
-        const people = parseInt(document.getElementById('booking-people')?.value || 1);
+        const quantity = parseInt(document.getElementById('booking-people')?.value || 1);
         const name = document.getElementById('booking-name')?.value;
         const phone = document.getElementById('booking-phone')?.value;
         
@@ -209,12 +281,16 @@
             return;
         }
         
-        const total = selectedActivity.price * people;
+        const total = selectedItem.price * quantity;
+        const typeText = selectedItem.type === 'hotel' ? 'nuitée' : (selectedItem.type === 'restaurant' ? 'repas' : 'réservation');
+        
         const booking = {
             id: Date.now(),
-            activityName: selectedActivity.name,
+            itemId: selectedItem.id,
+            itemName: selectedItem.name,
+            itemType: selectedItem.type,
             date: date,
-            people: people,
+            quantity: quantity,
             totalPrice: total,
             name: name,
             phone: phone
@@ -223,7 +299,7 @@
         bookings.unshift(booking);
         saveBookings();
         
-        alert(`✅ Réservation confirmée !\n\n${selectedActivity.name}\n${date}\n${people} personne(s)\n${total.toLocaleString()} FCFA`);
+        alert(`✅ ${typeText.charAt(0).toUpperCase() + typeText.slice(1)} confirmée !\n\n${selectedItem.name}\n${date}\n${quantity} ${selectedItem.type === 'hotel' ? 'chambre(s)' : (selectedItem.type === 'restaurant' ? 'couverts' : 'personne(s)')}\n${total.toLocaleString()} FCFA`);
         
         navigateTo('profile');
         updateStats();
@@ -238,45 +314,46 @@
                     <div class="empty">
                         <i class="fas fa-calendar-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
                         <p>Aucune réservation</p>
-                        <button class="btn" style="margin-top: 20px;" onclick="navigateTo('booking')">Réserver maintenant</button>
+                        <button class="btn" style="margin-top: 20px;" onclick="navigateTo('activities')">Découvrir maintenant</button>
                     </div>
                 `;
             } else {
-                container.innerHTML = bookings.map(b => `
-                    <div class="booking-card">
-                        <div style="font-weight: 700; color: #0a4b6e;">${b.activityName}</div>
-                        <div style="font-size: 0.85rem; margin: 5px 0;">📅 ${b.date} | 👥 ${b.people} pers</div>
-                        <div style="font-weight: 800; color: #f39c12;">${b.totalPrice.toLocaleString()} FCFA</div>
-                        <div style="font-size: 0.7rem; color: #95a5a6; margin-top: 5px;">${b.name}</div>
-                    </div>
-                `).join('');
+                container.innerHTML = bookings.map(b => {
+                    let typeIcon = b.itemType === 'hotel' ? '🏨' : (b.itemType === 'restaurant' ? '🍽️' : '🏄');
+                    let unitText = b.itemType === 'hotel' ? 'chambre(s)' : (b.itemType === 'restaurant' ? 'couverts' : 'pers');
+                    return `
+                        <div class="booking-card">
+                            <div style="font-weight: 700; color: #0a4b6e;">${typeIcon} ${b.itemName}</div>
+                            <div style="font-size: 0.85rem; margin: 5px 0;">📅 ${b.date} | 👥 ${b.quantity} ${unitText}</div>
+                            <div style="font-weight: 800; color: #f39c12;">${b.totalPrice.toLocaleString()} FCFA</div>
+                            <div style="font-size: 0.7rem; color: #95a5a6; margin-top: 5px;">${b.name}</div>
+                        </div>
+                    `;
+                }).join('');
             }
         }
     }
     
     // ========== NAVIGATION ==========
     function navigateTo(page) {
-        // Cacher toutes les pages
         document.getElementById('home-page').classList.add('hide');
         document.getElementById('activities-page').classList.add('hide');
         document.getElementById('booking-page').classList.add('hide');
         document.getElementById('profile-page').classList.add('hide');
         
-        // Afficher la page choisie
         document.getElementById(`${page}-page`).classList.remove('hide');
         
-        // Mettre à jour la navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
             if (item.dataset.page === page) item.classList.add('active');
         });
         
-        // Charger le contenu de la page
         if (page === 'home') {
             updateStats();
             showPopular();
         } else if (page === 'activities') {
-            showAllActivities();
+            setupTabs();
+            showAllItems();
         } else if (page === 'booking') {
             showBookingForm();
         } else if (page === 'profile') {
@@ -284,8 +361,8 @@
         }
     }
     
-    function selectActivity(id) {
-        selectedActivity = activities.find(a => a.id === id);
+    function selectItem(id) {
+        selectedItem = items.find(i => i.id === id);
         navigateTo('booking');
     }
     
@@ -293,16 +370,14 @@
     updateStats();
     showPopular();
     
-    // Lier les événements de navigation
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', function() {
             navigateTo(this.dataset.page);
         });
     });
     
-    // Exposer les fonctions globales pour les onclick HTML
     window.navigateTo = navigateTo;
-    window.selectActivity = selectActivity;
+    window.selectItem = selectItem;
     window.confirmBooking = confirmBooking;
 </script>
 
