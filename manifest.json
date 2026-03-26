@@ -1,11 +1,9 @@
 {
   "name": "AssinieGo",
   "short_name": "AssinieGo",
-  "description": "Réservez toutes les expériences d'Assinie",
+  "description": "Réservez vos expériences à Assinie",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a4b6e",
-  "theme_color": "#f39c12",
-  "orientation": "portrait",
-  "icons": []
+  "theme_color": "#f39c12"
 }
