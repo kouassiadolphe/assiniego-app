@@ -18,7 +18,7 @@
         .stat-label { font-size: 0.7rem; color: #7f8c8d; }
         .section { padding: 0 20px; margin-bottom: 30px; }
         .section-title { font-size: 1.3rem; font-weight: 700; color: #0a4b6e; margin-bottom: 15px; }
-        .card { background: white; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; cursor: pointer; }
+        .card { background: white; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; cursor: pointer; transition: transform 0.2s; }
         .card:active { transform: scale(0.98); }
         .card-icon { width: 80px; background: linear-gradient(135deg, #f39c12, #e67e22); display: flex; align-items: center; justify-content: center; }
         .card-icon i { font-size: 2rem; color: white; }
@@ -35,17 +35,17 @@
         .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.85rem; color: #2c3e50; }
         .form-group input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 0.9rem; }
         .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+        .btn:active { transform: scale(0.98); }
         .empty { text-align: center; padding: 40px; color: #95a5a6; }
         .booking-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .hide { display: none; }
-        .active-page { display: block; }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <!-- Pages -->
-    <div id="home-page" class="active-page">
+    <!-- Page Accueil -->
+    <div id="home-page">
         <div class="header">
             <h1>Bienvenue sur<br><span>AssinieGo</span></h1>
             <p>Votre week-end à Assinie commence ici</p>
@@ -57,6 +57,7 @@
         </div>
     </div>
 
+    <!-- Page Activités -->
     <div id="activities-page" class="hide">
         <div class="header">
             <h1>🏄 <span>Toutes les activités</span></h1>
@@ -67,6 +68,7 @@
         </div>
     </div>
 
+    <!-- Page Réservation -->
     <div id="booking-page" class="hide">
         <div class="header">
             <h1>📝 <span>Nouvelle réservation</span></h1>
@@ -77,6 +79,7 @@
         </div>
     </div>
 
+    <!-- Page Profil -->
     <div id="profile-page" class="hide">
         <div class="header">
             <h1>👤 <span>Mon profil</span></h1>
@@ -97,7 +100,7 @@
 </div>
 
 <script>
-    // Données
+    // ========== DONNÉES ==========
     const activities = [
         { id: 1, name: "Jet-Ski Extrême", desc: "Sensation forte sur l'océan", price: 25000, icon: "fa-water" },
         { id: 2, name: "Quad Aventure", desc: "Explorez les 17 km de sable blanc", price: 35000, icon: "fa-motorcycle" },
@@ -110,7 +113,7 @@
     let bookings = [];
     let selectedActivity = activities[0];
     
-    // Charger les réservations depuis localStorage
+    // ========== STOCKAGE ==========
     try {
         const saved = localStorage.getItem('assiniego_bookings');
         if (saved) bookings = JSON.parse(saved);
@@ -120,6 +123,7 @@
         localStorage.setItem('assiniego_bookings', JSON.stringify(bookings));
     }
     
+    // ========== AFFICHAGE ==========
     function updateStats() {
         const statsDiv = document.getElementById('stats');
         if (statsDiv) {
@@ -212,7 +216,8 @@
             date: date,
             people: people,
             totalPrice: total,
-            name: name
+            name: name,
+            phone: phone
         };
         
         bookings.unshift(booking);
@@ -242,12 +247,14 @@
                         <div style="font-weight: 700; color: #0a4b6e;">${b.activityName}</div>
                         <div style="font-size: 0.85rem; margin: 5px 0;">📅 ${b.date} | 👥 ${b.people} pers</div>
                         <div style="font-weight: 800; color: #f39c12;">${b.totalPrice.toLocaleString()} FCFA</div>
+                        <div style="font-size: 0.7rem; color: #95a5a6; margin-top: 5px;">${b.name}</div>
                     </div>
                 `).join('');
             }
         }
     }
     
+    // ========== NAVIGATION ==========
     function navigateTo(page) {
         // Cacher toutes les pages
         document.getElementById('home-page').classList.add('hide');
@@ -264,7 +271,7 @@
             if (item.dataset.page === page) item.classList.add('active');
         });
         
-        // Charger le contenu
+        // Charger le contenu de la page
         if (page === 'home') {
             updateStats();
             showPopular();
@@ -282,11 +289,18 @@
         navigateTo('booking');
     }
     
-    // Initialisation
+    // ========== INITIALISATION ==========
     updateStats();
     showPopular();
     
-    // Exposer les fonctions
+    // Lier les événements de navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            navigateTo(this.dataset.page);
+        });
+    });
+    
+    // Exposer les fonctions globales pour les onclick HTML
     window.navigateTo = navigateTo;
     window.selectActivity = selectActivity;
     window.confirmBooking = confirmBooking;
