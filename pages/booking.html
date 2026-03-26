@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Réserver - AssinieGo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Assinie<span class="logo-highlight">Go</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Accueil</a>
+                <a href="activities.html">Expériences</a>
+                <a href="booking.html" class="active">Réserver</a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Réservez votre expérience</h1>
+            <p>Remplissez le formulaire et recevez votre confirmation immédiatement</p>
+        </div>
+    </section>
+
+    <section class="booking-section">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-form-container">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="activitySelect"><i class="fas fa-water"></i> Choisissez votre activité *</label>
+                            <select id="activitySelect" required>
+                                <option value="">Sélectionnez une activité</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date"><i class="fas fa-calendar"></i> Date *</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="time"><i class="fas fa-clock"></i> Horaire *</label>
+                                <select id="time" required>
+                                    <option value="">Sélectionnez un horaire</option>
+                                    <option value="09:00">09:00 - Matin</option>
+                                    <option value="11:00">11:00 - Début de journée</option>
+                                    <option value="14:00">14:00 - Après-midi</option>
+                                    <option value="16:00">16:00 - Fin d'après-midi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="people"><i class="fas fa-users"></i> Nombre de personnes *</label>
+                                <input type="number" id="people" min="1" max="20" value="2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="totalPrice"><i class="fas fa-tag"></i> Prix total</label>
+                                <div class="price-display" id="totalPrice">0 FCFA</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Vos informations</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="firstName" placeholder="Prénom *" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="lastName" placeholder="Nom *" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="email" id="email" placeholder="Email *" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" id="phone" placeholder="Téléphone (Wave/Orange) *" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialRequests">Demandes spéciales (optionnel)</label>
+                            <textarea id="specialRequests" rows="3" placeholder="Allergies, besoins spécifiques, message..."></textarea>
+                        </div>
+
+                        <div class="payment-section">
+                            <h3>Mode de paiement</h3>
+                            <div class="payment-methods">
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="wave" checked>
+                                    <span class="payment-card">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <strong>Wave</strong>
+                                    </span>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="orange">
+                                    <span class="payment-card">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <strong>Orange Money</strong>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-block" id="submitBooking">
+                            <i class="fas fa-lock"></i> Payer et réserver
+                        </button>
+                    </form>
+                </div>
+
+                <div class="booking-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-check-circle"></i> Pourquoi réserver avec AssinieGo ?</h3>
+                        <ul>
+                            <li><i class="fas fa-bolt"></i> Confirmation instantanée</li>
+                            <li><i class="fas fa-shield-alt"></i> Paiement 100% sécurisé</li>
+                            <li><i class="fas fa-headset"></i> Support client dédié</li>
+                            <li><i class="fas fa-sync-alt"></i> Annulation gratuite 24h avant</li>
+                        </ul>
+                        <div class="secure-badge">
+                            <i class="fas fa-lock"></i> Transactions sécurisées
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de confirmation -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-check-circle"></i>
+                <h2>Réservation confirmée !</h2>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenu dynamique -->
+            </div>
+            <button class="btn-primary" onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <span>AssinieGo</span>
+                </div>
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <a href="index.html">Accueil</a>
+                    <a href="activities.html">Expériences</a>
+                    <a href="booking.html">Réserver</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AssinieGo</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/booking.js"></script>
+</body>
+</html>

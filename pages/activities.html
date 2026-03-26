@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Expériences - AssinieGo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Assinie<span class="logo-highlight">Go</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Accueil</a>
+                <a href="activities.html" class="active">Expériences</a>
+                <a href="booking.html" class="btn-nav-book">Réserver</a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Toutes les expériences</h1>
+            <p>Choisissez votre activité et réservez en quelques clics</p>
+        </div>
+    </section>
+
+    <section class="activities-list">
+        <div class="container">
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">Tous</button>
+                <button class="filter-btn" data-category="nautique">Nautique</button>
+                <button class="filter-btn" data-category="terrestre">Terrestre</button>
+                <button class="filter-btn" data-category="nature">Nature</button>
+            </div>
+            <div class="cards-grid" id="all-activities">
+                <!-- Rempli par JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <span>AssinieGo</span>
+                </div>
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <a href="index.html">Accueil</a>
+                    <a href="activities.html">Expériences</a>
+                    <a href="booking.html">Réserver</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-phone"></i> +225 07 XX XX XX XX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AssinieGo</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/activities.js"></script>
+</body>
+</html>
