@@ -2,38 +2,190 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AssinieGo - Réservations Hôtels & Activités</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>AssinieGo - Hôtels • Restaurants • Activités</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f5f7fa; padding-bottom: 70px; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; overflow-x: hidden; }
         
-        /* Header */
-        .header { background: linear-gradient(135deg, #0a4b6e, #063a57); color: white; padding: 30px 20px; text-align: center; }
+        /* ========== SPLASH SCREEN ANIMATION ========== */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a4b6e, #063a57, #0a4b6e);
+            background-size: 200% 200%;
+            animation: gradientShift 1.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .splash-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .splash-content {
+            text-align: center;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .splash-logo {
+            margin-bottom: 30px;
+        }
+        
+        .splash-logo i {
+            font-size: 5rem;
+            color: #f39c12;
+            animation: floatLogo 1.2s ease-in-out infinite, pulseLogo 1.5s ease infinite;
+            display: inline-block;
+        }
+        
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes pulseLogo {
+            0%, 100% { text-shadow: 0 0 0 rgba(243, 156, 18, 0.7); }
+            50% { text-shadow: 0 0 20px rgba(243, 156, 18, 0.9); }
+        }
+        
+        .splash-logo span {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            margin-top: 15px;
+            letter-spacing: 2px;
+            animation: fadeInText 0.8s ease 0.3s both;
+        }
+        
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                letter-spacing: 5px;
+            }
+            to {
+                opacity: 1;
+                letter-spacing: 2px;
+            }
+        }
+        
+        .splash-wave {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .wave-bar {
+            width: 6px;
+            height: 40px;
+            background: #f39c12;
+            border-radius: 3px;
+            animation: waveBar 1s ease-in-out infinite;
+        }
+        
+        .wave-bar:nth-child(1) { animation-delay: 0s; height: 30px; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 50px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 70px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 50px; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 30px; }
+        
+        @keyframes waveBar {
+            0%, 100% { transform: scaleY(0.6); opacity: 0.5; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        .splash-text {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            animation: fadeInText 0.8s ease 0.6s both;
+        }
+        
+        .splash-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: dotPulse 1s ease-in-out infinite;
+        }
+        
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; background: #f39c12; }
+        }
+        
+        /* ========== MAIN APP ========== */
+        .app-container {
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .app-container.visible {
+            opacity: 1;
+        }
+        
+        .header { background: linear-gradient(135deg, #0a4b6e, #063a57); color: white; padding: 30px 20px; text-align: center; animation: slideDown 0.5s ease; }
+        @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
         .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
         .header h1 span { color: #f39c12; }
         .header p { opacity: 0.9; font-size: 0.9rem; }
         
-        /* Stats */
-        .stats { display: flex; justify-content: space-around; background: white; margin: 20px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .stats { display: flex; justify-content: space-around; background: white; margin: 20px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); animation: fadeInUp 0.5s ease 0.1s both; }
         .stat { text-align: center; }
         .stat-value { font-size: 1.5rem; font-weight: 800; color: #0a4b6e; }
         .stat-label { font-size: 0.7rem; color: #7f8c8d; }
         
-        /* Sections */
         .section { padding: 0 20px; margin-bottom: 30px; }
         .section-title { font-size: 1.3rem; font-weight: 700; color: #0a4b6e; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .section-title i { color: #f39c12; }
         
-        /* Tabs */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 8px; border-radius: 50px; }
         .tab { flex: 1; text-align: center; padding: 10px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
         .tab.active { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
         
-        /* Cards */
-        .card { background: white; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; cursor: pointer; transition: transform 0.2s; }
+        .card { background: white; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; animation: fadeInUp 0.5s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
         .card:active { transform: scale(0.98); }
         .card-icon { width: 80px; background: linear-gradient(135deg, #f39c12, #e67e22); display: flex; align-items: center; justify-content: center; }
         .card-icon i { font-size: 2rem; color: white; }
@@ -44,31 +196,62 @@
         .card-location { font-size: 0.7rem; color: #95a5a6; margin-top: 5px; }
         .card-rating { color: #f39c12; font-size: 0.8rem; margin-top: 5px; }
         
-        /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; }
-        .nav-item { text-align: center; cursor: pointer; padding: 5px 15px; }
-        .nav-item i { font-size: 1.3rem; color: #95a5a6; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .nav-item { text-align: center; cursor: pointer; padding: 5px 15px; transition: transform 0.2s; }
+        .nav-item:active { transform: scale(0.95); }
+        .nav-item i { font-size: 1.3rem; color: #95a5a6; transition: color 0.2s; }
         .nav-item span { font-size: 0.7rem; color: #95a5a6; display: block; }
         .nav-item.active i, .nav-item.active span { color: #f39c12; }
         
-        /* Form */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.85rem; color: #2c3e50; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 0.9rem; }
-        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 0.9rem; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: #f39c12; }
+        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 10px; transition: transform 0.2s, box-shadow 0.2s; }
         .btn:active { transform: scale(0.98); }
         .empty { text-align: center; padding: 40px; color: #95a5a6; }
-        .booking-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .booking-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); animation: fadeInUp 0.3s ease; }
         .hide { display: none; }
         .type-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 5px; }
         .type-activity { background: #e3f2fd; color: #0a4b6e; }
         .type-restaurant { background: #fff3e0; color: #e67e22; }
         .type-hotel { background: #e8f5e9; color: #27ae60; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-<div id="app">
+<!-- SPLASH SCREEN -->
+<div id="splash" class="splash-screen">
+    <div class="splash-content">
+        <div class="splash-logo">
+            <i class="fas fa-umbrella-beach"></i>
+            <span>AssinieGo</span>
+        </div>
+        <div class="splash-wave">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+        </div>
+        <div class="splash-text">Hôtels • Restaurants • Activités</div>
+        <div class="splash-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="app-container">
     <!-- Page Accueil -->
     <div id="home-page">
         <div class="header">
@@ -82,7 +265,7 @@
         </div>
     </div>
 
-    <!-- Page Activités -->
+    <!-- Page Découvrir -->
     <div id="activities-page" class="hide">
         <div class="header">
             <h1>🏄 <span>Découvrir Assinie</span></h1>
@@ -133,52 +316,40 @@
 <script>
     // ========== DONNÉES ==========
     const items = [
-        // Activités
         { id: 1, name: "Jet-Ski Extrême", desc: "Sensation forte sur l'océan", price: 25000, type: "activity", icon: "fa-water", location: "Plage de La Passe", rating: 4.8 },
         { id: 2, name: "Quad Aventure", desc: "Explorez les 17 km de sable blanc", price: 35000, type: "activity", icon: "fa-motorcycle", location: "Plage d'Assinie", rating: 4.9 },
         { id: 3, name: "Bateau VIP", desc: "Croisière privée sur la lagune", price: 150000, type: "activity", icon: "fa-ship", location: "Lagune Aby", rating: 5.0 },
         { id: 4, name: "Pêche Traditionnelle", desc: "Techniques de pêche locales", price: 15000, type: "activity", icon: "fa-fish", location: "Village de pêcheurs", rating: 4.5 },
         { id: 5, name: "Parc National", desc: "Découverte des îles Ehotilé", price: 10000, type: "activity", icon: "fa-tree", location: "Îles Ehotilé", rating: 4.7 },
         { id: 6, name: "Coucher de Soleil", desc: "Moment magique à La Passe", price: 8000, type: "activity", icon: "fa-sun", location: "La Passe", rating: 4.9 },
-        
-        // Restaurants
-        { id: 7, name: "La Plage Gourmande", desc: "Cuisine locale et fruits de mer", price: 5000, type: "restaurant", icon: "fa-utensils", location: "Plage d'Assinie", rating: 4.6, priceRange: "moyen" },
-        { id: 8, name: "Chez Fatou", desc: "Poisson frais et attiéké", price: 3500, type: "restaurant", icon: "fa-fish", location: "Village", rating: 4.4, priceRange: "bon marché" },
-        { id: 9, name: "Le Nautique", desc: "Restaurant gastronomique vue mer", price: 12000, type: "restaurant", icon: "fa-champagne-glasses", location: "Bord de mer", rating: 4.9, priceRange: "luxe" },
-        { id: 10, name: "La Lagune", desc: "Spécialités ivoiriennes", price: 8000, type: "restaurant", icon: "fa-leaf", location: "Bord de lagune", rating: 4.5, priceRange: "moyen" },
-        
-        // Hôtels
-        { id: 11, name: "L'Écrin d'Assinie", desc: "Villas de luxe avec piscine", price: 85000, type: "hotel", icon: "fa-hotel", location: "Plage privée", rating: 4.9, rooms: "5 suites" },
-        { id: 12, name: "Le Paradis Blanc", desc: "Bungalows pieds dans l'eau", price: 65000, type: "hotel", icon: "fa-umbrella-beach", location: "Face à l'océan", rating: 4.7, rooms: "12 bungalows" },
-        { id: 13, name: "Villa Assinie", desc: "Chambres confortables, jardin tropical", price: 35000, type: "hotel", icon: "fa-tree", location: "Centre ville", rating: 4.3, rooms: "8 chambres" }
+        { id: 7, name: "La Plage Gourmande", desc: "Cuisine locale et fruits de mer", price: 5000, type: "restaurant", icon: "fa-utensils", location: "Plage d'Assinie", rating: 4.6 },
+        { id: 8, name: "Chez Fatou", desc: "Poisson frais et attiéké", price: 3500, type: "restaurant", icon: "fa-fish", location: "Village", rating: 4.4 },
+        { id: 9, name: "Le Nautique", desc: "Restaurant gastronomique vue mer", price: 12000, type: "restaurant", icon: "fa-champagne-glasses", location: "Bord de mer", rating: 4.9 },
+        { id: 10, name: "La Lagune", desc: "Spécialités ivoiriennes", price: 8000, type: "restaurant", icon: "fa-leaf", location: "Bord de lagune", rating: 4.5 },
+        { id: 11, name: "L'Écrin d'Assinie", desc: "Villas de luxe avec piscine", price: 85000, type: "hotel", icon: "fa-hotel", location: "Plage privée", rating: 4.9 },
+        { id: 12, name: "Le Paradis Blanc", desc: "Bungalows pieds dans l'eau", price: 65000, type: "hotel", icon: "fa-umbrella-beach", location: "Face à l'océan", rating: 4.7 },
+        { id: 13, name: "Villa Assinie", desc: "Chambres confortables, jardin tropical", price: 35000, type: "hotel", icon: "fa-tree", location: "Centre ville", rating: 4.3 }
     ];
     
     let bookings = [];
     let selectedItem = items[0];
     let currentFilter = "all";
     
-    // ========== STOCKAGE ==========
     try {
         const saved = localStorage.getItem('assiniego_bookings');
         if (saved) bookings = JSON.parse(saved);
     } catch(e) {}
     
-    function saveBookings() {
-        localStorage.setItem('assiniego_bookings', JSON.stringify(bookings));
-    }
+    function saveBookings() { localStorage.setItem('assiniego_bookings', JSON.stringify(bookings)); }
     
-    // ========== AFFICHAGE ==========
     function updateStats() {
         const statsDiv = document.getElementById('stats');
         if (statsDiv) {
-            const activitiesCount = items.filter(i => i.type === 'activity').length;
-            const restaurantsCount = items.filter(i => i.type === 'restaurant').length;
-            const hotelsCount = items.filter(i => i.type === 'hotel').length;
             statsDiv.innerHTML = `
                 <div class="stat"><div class="stat-value">${bookings.length}</div><div class="stat-label">Réservations</div></div>
-                <div class="stat"><div class="stat-value">${activitiesCount}</div><div class="stat-label">Activités</div></div>
-                <div class="stat"><div class="stat-value">${restaurantsCount}</div><div class="stat-label">Restos</div></div>
-                <div class="stat"><div class="stat-value">${hotelsCount}</div><div class="stat-label">Hôtels</div></div>
+                <div class="stat"><div class="stat-value">${items.filter(i => i.type === 'activity').length}</div><div class="stat-label">Activités</div></div>
+                <div class="stat"><div class="stat-value">${items.filter(i => i.type === 'restaurant').length}</div><div class="stat-label">Restos</div></div>
+                <div class="stat"><div class="stat-value">${items.filter(i => i.type === 'hotel').length}</div><div class="stat-label">Hôtels</div></div>
             `;
         }
     }
@@ -216,10 +387,7 @@
     function showAllItems() {
         const container = document.getElementById('all-list');
         if (container) {
-            let filtered = items;
-            if (currentFilter !== 'all') {
-                filtered = items.filter(i => i.type === currentFilter);
-            }
+            let filtered = currentFilter === 'all' ? items : items.filter(i => i.type === currentFilter);
             container.innerHTML = filtered.map(i => renderCard(i)).join('');
         }
     }
@@ -249,22 +417,10 @@
                         <div class="card-location"><i class="fas fa-map-marker-alt"></i> ${selectedItem.location}</div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>📅 Date</label>
-                    <input type="date" id="booking-date">
-                </div>
-                <div class="form-group">
-                    <label>👥 Nombre de ${selectedItem.type === 'hotel' ? 'chambres' : (selectedItem.type === 'restaurant' ? 'couverts' : 'personnes')}</label>
-                    <input type="number" id="booking-people" value="1" min="1">
-                </div>
-                <div class="form-group">
-                    <label>👤 Votre nom</label>
-                    <input type="text" id="booking-name" placeholder="Nom complet">
-                </div>
-                <div class="form-group">
-                    <label>📱 Téléphone</label>
-                    <input type="tel" id="booking-phone" placeholder="05 XX XX XX XX">
-                </div>
+                <div class="form-group"><label>📅 Date</label><input type="date" id="booking-date"></div>
+                <div class="form-group"><label>👥 ${selectedItem.type === 'hotel' ? 'Nombre de chambres' : (selectedItem.type === 'restaurant' ? 'Nombre de couverts' : 'Nombre de personnes')}</label><input type="number" id="booking-people" value="1" min="1"></div>
+                <div class="form-group"><label>👤 Votre nom</label><input type="text" id="booking-name" placeholder="Nom complet"></div>
+                <div class="form-group"><label>📱 Téléphone</label><input type="tel" id="booking-phone" placeholder="05 XX XX XX XX"></div>
                 <button class="btn" onclick="confirmBooking()">✅ Réserver maintenant</button>
             `;
         }
@@ -276,31 +432,13 @@
         const name = document.getElementById('booking-name')?.value;
         const phone = document.getElementById('booking-phone')?.value;
         
-        if (!date || !name || !phone) {
-            alert('Veuillez remplir tous les champs');
-            return;
-        }
+        if (!date || !name || !phone) { alert('Veuillez remplir tous les champs'); return; }
         
         const total = selectedItem.price * quantity;
-        const typeText = selectedItem.type === 'hotel' ? 'nuitée' : (selectedItem.type === 'restaurant' ? 'repas' : 'réservation');
-        
-        const booking = {
-            id: Date.now(),
-            itemId: selectedItem.id,
-            itemName: selectedItem.name,
-            itemType: selectedItem.type,
-            date: date,
-            quantity: quantity,
-            totalPrice: total,
-            name: name,
-            phone: phone
-        };
-        
+        const booking = { id: Date.now(), itemId: selectedItem.id, itemName: selectedItem.name, itemType: selectedItem.type, date, quantity, totalPrice: total, name, phone };
         bookings.unshift(booking);
         saveBookings();
-        
-        alert(`✅ ${typeText.charAt(0).toUpperCase() + typeText.slice(1)} confirmée !\n\n${selectedItem.name}\n${date}\n${quantity} ${selectedItem.type === 'hotel' ? 'chambre(s)' : (selectedItem.type === 'restaurant' ? 'couverts' : 'personne(s)')}\n${total.toLocaleString()} FCFA`);
-        
+        alert(`✅ Réservation confirmée !\n\n${selectedItem.name}\n${date}\n${quantity} ${selectedItem.type === 'hotel' ? 'chambre(s)' : (selectedItem.type === 'restaurant' ? 'couverts' : 'personne(s)')}\n${total.toLocaleString()} FCFA`);
         navigateTo('profile');
         updateStats();
         showBookings();
@@ -310,71 +448,45 @@
         const container = document.getElementById('bookings-list');
         if (container) {
             if (bookings.length === 0) {
-                container.innerHTML = `
-                    <div class="empty">
-                        <i class="fas fa-calendar-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                        <p>Aucune réservation</p>
-                        <button class="btn" style="margin-top: 20px;" onclick="navigateTo('activities')">Découvrir maintenant</button>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty"><i class="fas fa-calendar-alt" style="font-size: 3rem; margin-bottom: 10px;"></i><p>Aucune réservation</p><button class="btn" style="margin-top: 20px;" onclick="navigateTo('activities')">Découvrir maintenant</button></div>`;
             } else {
                 container.innerHTML = bookings.map(b => {
                     let typeIcon = b.itemType === 'hotel' ? '🏨' : (b.itemType === 'restaurant' ? '🍽️' : '🏄');
                     let unitText = b.itemType === 'hotel' ? 'chambre(s)' : (b.itemType === 'restaurant' ? 'couverts' : 'pers');
-                    return `
-                        <div class="booking-card">
-                            <div style="font-weight: 700; color: #0a4b6e;">${typeIcon} ${b.itemName}</div>
-                            <div style="font-size: 0.85rem; margin: 5px 0;">📅 ${b.date} | 👥 ${b.quantity} ${unitText}</div>
-                            <div style="font-weight: 800; color: #f39c12;">${b.totalPrice.toLocaleString()} FCFA</div>
-                            <div style="font-size: 0.7rem; color: #95a5a6; margin-top: 5px;">${b.name}</div>
-                        </div>
-                    `;
+                    return `<div class="booking-card"><div style="font-weight: 700; color: #0a4b6e;">${typeIcon} ${b.itemName}</div><div style="font-size: 0.85rem; margin: 5px 0;">📅 ${b.date} | 👥 ${b.quantity} ${unitText}</div><div style="font-weight: 800; color: #f39c12;">${b.totalPrice.toLocaleString()} FCFA</div><div style="font-size: 0.7rem; color: #95a5a6; margin-top: 5px;">${b.name}</div></div>`;
                 }).join('');
             }
         }
     }
     
-    // ========== NAVIGATION ==========
     function navigateTo(page) {
         document.getElementById('home-page').classList.add('hide');
         document.getElementById('activities-page').classList.add('hide');
         document.getElementById('booking-page').classList.add('hide');
         document.getElementById('profile-page').classList.add('hide');
-        
         document.getElementById(`${page}-page`).classList.remove('hide');
-        
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.page === page) item.classList.add('active');
-        });
-        
-        if (page === 'home') {
-            updateStats();
-            showPopular();
-        } else if (page === 'activities') {
-            setupTabs();
-            showAllItems();
-        } else if (page === 'booking') {
-            showBookingForm();
-        } else if (page === 'profile') {
-            showBookings();
-        }
+        document.querySelectorAll('.nav-item').forEach(item => { item.classList.remove('active'); if (item.dataset.page === page) item.classList.add('active'); });
+        if (page === 'home') { updateStats(); showPopular(); }
+        else if (page === 'activities') { setupTabs(); showAllItems(); }
+        else if (page === 'booking') { showBookingForm(); }
+        else if (page === 'profile') { showBookings(); }
     }
     
-    function selectItem(id) {
-        selectedItem = items.find(i => i.id === id);
-        navigateTo('booking');
-    }
+    function selectItem(id) { selectedItem = items.find(i => i.id === id); navigateTo('booking'); }
     
-    // ========== INITIALISATION ==========
+    // SPLASH SCREEN + INIT
+    setTimeout(() => {
+        const splash = document.getElementById('splash');
+        splash.classList.add('hide');
+        setTimeout(() => {
+            document.getElementById('app').classList.add('visible');
+        }, 100);
+    }, 2500);
+    
+    document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => navigateTo(item.dataset.page)); });
+    
     updateStats();
     showPopular();
-    
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function() {
-            navigateTo(this.dataset.page);
-        });
-    });
     
     window.navigateTo = navigateTo;
     window.selectItem = selectItem;
